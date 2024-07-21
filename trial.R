@@ -6,3 +6,5 @@ trade <- file_excel %>%
                values_to = "value_exportation") %>%
   filter(Partner_Name %in% mena_countries) %>%
   filter(year < 2012) 
+
+filter <-6 araralo 
