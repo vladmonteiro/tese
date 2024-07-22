@@ -1,0 +1,28 @@
+library(tidyverse)
+library(dplyr)
+library(readxl)
+library(ggplot2)
+
+source <- read_excel("D:\\Docs\\Doutorado\\Tese - Pesquisa\\RPDN\\RPDN_TR_Presidential_diplomacy.xlsx", sheet = 1)
+
+mena_iso3 <- c("ARE", "BHR", "DJI", "DZA", "EGY", "IRN", "IRQ", "ISR", "JOR", "KWT", "LBN", "LBY", "MAR", "MLT", "OMN", "QAT", "SAU", "SYR","TUN", "YEM")
+
+
+mena_oficial_trips <- source %>%
+  filter(iso3 %in% mena_iso3) %>%
+  filter(year > 2002 & year < 2011)
+
+
+
+tb <- source %>%
+  count(dest_name, rep_term, sort = T)
+
+
+ggplot(mena_oficial_trips, aes(dest_name)) +
+  geom_bar(just = 0.2) +
+  xlab("País visitado") +
+  ylab("Número de viagens") +
+  theme(axis.title.y  = element_text(size = 11, family = "serif" )) +
+  theme(axis.title.x  = element_text(size = 11, family = "serif")) +
+  theme(axis.text.x = element_text(angle = 50, vjust = 1, hjust = 0.9, size = 9, family = "serif")) +
+  theme(axis.text.y = element_text(family = "serif"))
