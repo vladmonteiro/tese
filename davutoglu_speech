@@ -1,0 +1,30 @@
+library(rvest)
+library(tidyr)
+library(dplyr)
+library(tidytext)
+library(wordcloud2)
+
+url2 <- read_html("https://www.aljazeera.com/opinions/2011/3/13/al-jazeera-forum-ahmet-davutoglu-2")
+
+vetor_discurso <- html_nodes(url2, "p") %>%
+  html_text()
+
+df_discurso <- tibble(text = vetor_discurso[2:31], author = "Davutoglu")
+
+
+df_discurso_termos_separados <- df_discurso %>%
+  unnest_tokens(word, text)
+
+df_discurso_filtrado <- df_discurso_termos_separados %>%
+  anti_join(stop_w)
+
+df_discurso_palavras_contadas <- df_discurso_filtrado %>%
+  count(word)
+
+set.seed(1234)
+wordcloud(df_discurso_palavras_contadas$word, freq =  df_discurso_palavras_contadas$n,
+          max.words = 30,
+          scale = c(3, 0.2),
+          rot.per = 0.2,
+          colors = brewer.pal(8, "Dark2"))
+
